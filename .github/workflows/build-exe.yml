@@ -30,12 +30,18 @@ jobs:
           & .\.venv\Scripts\pyinstaller.exe --onefile --windowed --name AIWriteX --clean main.py `
             --add-data "src;src" `
             --add-data "knowledge;knowledge" `
-            --add-data "*.jpg;." `
-            --add-data "*.png;." `
+            --add-data "De_AI_Flavor.jpg;." `
+            --add-data "bot.jpg;." `
+            --add-data "preview.jpg;." `
+            --add-data "preview1.jpg;." `
+            --add-data "preview2.jpg;." `
+            --add-data "preview_aipic.jpg;." `
+            --add-data "trace.jpg;." `
             --hidden-import=crewai `
             --hidden-import=langchain `
             --hidden-import=langchain_community `
             --hidden-import=langchain_openai `
+            --hidden-import=langchain_core `
             --collect-all crewai
 
       - name: Upload EXE
