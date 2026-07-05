@@ -27,14 +27,15 @@ jobs:
       - name: Build EXE
         shell: pwsh
         run: |
-          # 确保使用 uv 虚拟环境的 pyinstaller
           & .\.venv\Scripts\pyinstaller.exe --onefile --windowed --name AIWriteX --clean main.py `
-            --add-data "config.yaml;." `
             --add-data "src;src" `
             --add-data "knowledge;knowledge" `
+            --add-data "*.jpg;." `
+            --add-data "*.png;." `
             --hidden-import=crewai `
             --hidden-import=langchain `
             --hidden-import=langchain_community `
+            --hidden-import=langchain_openai `
             --collect-all crewai
 
       - name: Upload EXE
