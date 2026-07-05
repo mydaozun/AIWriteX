@@ -1,0 +1,42 @@
+name: Build Windows EXE
+
+on:
+  push:
+    tags: ['v*']        # 打 tag 时自动触发（如 v2.4.8）
+  workflow_dispatch:     # 手动触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv venv
+          uv pip install -r requirements.txt pyinstaller
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed --name AIWriteX --clean main.py `
+            --add-data "config.yaml;." `
+            --add-data "src;src" `
+            # 添加其他文件夹：--add-data "knowledge;knowledge" 等
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AIWriteX-EXE
+          path: dist/AIWriteX.exe
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/AIWriteX.exe
